@@ -10,13 +10,12 @@ class Controller {
     // getting a single Person
     async getPerson(id) {
         return new Promise((resolve, reject) => {
-            // get the Person
-            let Person = data.find((Person) => Person.id === parseInt(id));
-            if (Person) {
-                // return the Person
-                resolve(Person);
+            let person = data.find((person) => person.id === parseInt(id));
+            console.log("works");
+            if (person) {
+                resolve(person);
             } else {
-                // return an error
+                console.log("Error");
                 reject(`Person with id ${id} not found `);
             }
         });
@@ -36,32 +35,23 @@ class Controller {
         });
     }
 
-    // updating a Person
     async updatePerson(id) {
         return new Promise((resolve, reject) => {
-            // get the Person.
-            let Person = data.find((Person) => Person.id === parseInt(id));
-            // if no Person, return an error
-            if (!Person) {
+            let person = data.find((person) => person.id === parseInt(id));
+            if (!person) {
                 reject(`No Person with id ${id} found`);
             }
-            //else, update it by setting completed to true
-            Person["completed"] = true;
-            // return the updated Person
-            resolve(Person);
+            person["completed"] = true;
+            resolve(person);
         });
     }
 
-    // deleting a Person
     async deletePerson(id) {
         return new Promise((resolve, reject) => {
-            // get the Person
-            let Person = data.find((Person) => Person.id === parseInt(id));
-            // if no Person, return an error
-            if (!Person) {
+            let person = data.find((Person) => person.id === parseInt(id));
+            if (!person) {
                 reject(`No Person with id ${id} found`);
             }
-            // else, return a success message
             resolve(`Person deleted successfully`);
         });
     }
