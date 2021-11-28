@@ -14,14 +14,14 @@ const Persons = [
     hobbies: ["art", "IT", "cycling"],
   },
   {
-    id: 3,
+    id: 2,
     name: 3,
     secName: "Taking a walk",
     age: "Easy time at the park",
     hobbies: ["art", "IT", "cycling"],
   },
   {
-    id: 4,
+    id: 3,
     name: 4,
     secName: "Watching Netflix",
     age: "Enjoying the new premiered series",

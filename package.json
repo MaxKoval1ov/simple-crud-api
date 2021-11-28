@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/MaxKoval1ov/simple-crud-api#readme",
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "jest": "^27.3.1",
     "terser-webpack-plugin": "^5.2.5",
     "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1"
