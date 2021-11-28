@@ -1,112 +1,109 @@
-//During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = "test";
+require("dotenv").config();
+const { test, expect, describe } = require("@jest/globals");
+const request = require("supertest");
+const server = require("../app");
+const {
+  getPersons,
+  getPerson,
+  createPerson,
+  updatePerson,
+  deletePerson,
+} = require("../controllers/personController");
+let persons = require("../data/person");
+
+const firstPerson = {
+  name: "Maks",
+  secName: "White",
+  age: 19,
+  hobbies: ["sport", "programming"],
+};
+
+const secondPerson = {
+  name: "Test",
+  secName: "TEST",
+  age: 100,
+  hobbies: ["Test"],
+  id:100
+};
 
 
-const { jest } = require('@jest/globals');
-const server = require('../app');
+describe("Persons", () => {
+  let tempArr = [];
+  // beforeEach(() => {
+  //   server.listen(process.env.PORT || 5000, (err) => {
+  //     if (err) {
+  //       process.stderr.write("Something went wrong", "utf8");
 
+  //       process.exit(1);
+  //     } else {
+  //       console.log(`Server running on port ${process.env.PORT}}` );
+  //     }
+  //   });
+  //   });
+  //   afterEach(() => {
+  //     httpServer.close();
+  //   });
 
-chai.use(chaiHttp);
-// Our main block
-describe('Persons', () => {
-  // Consts
-  const id = '3',
-    numPersons = 5,
-    successCode = 200,
-    product = {
-        name:"name",
-        secName:"Cooking Supper",
-        age:"Preparing rice and chicken",
-        hobbies:["PI"]
-    },
-    testName = 'Ange',
-    testPrice = { title: 'hello', price: '778' };
-
-  /*
-  * Test for /GET
-  */
-  describe('/GET person', () => {
-    it('it should GET all the products', done => {
-      jest.request(server);
-      chai.request(server)
-        .get('/api/products')
-        .end((err, res) => {
-          res.should.have.status(successCode);
-          res.body.should.be.a('array');
-          res.body.length.should.be.eql(numProducts);
-          done();
-        });
-    });
+  test("/GET person", (done) => {
+    request(server)
+      .get("/person")
+      .end((err, res) => {
+        expect(res.statusCode).toBe(200);
+        expect(res.text).toBe(JSON.stringify([]));
+        done();
+      });
   });
-  /*
-  * Test for /POST
-  */
-  describe('/POST product', () => {
-    it('it should POST a product ', done => {
-      chai.request(server)
-        .post('/api/products')
-        .send(product)
-        .end((err, res) => {
-          res.should.have.status(201);
-          res.body.should.be.a('object');
-          res.body.should.have.property('name');
-          res.body.should.have.property('description');
-          res.body.should.have.property('price');
-          res.body.should.have.property('id');
-          done();
-        });
-    });
+
+  test("/POST person", (done) => {
+    request(server)
+      .post("/person")
+      .send(firstPerson)
+      .end((err, res) => {
+        const result = res.text;
+        tempArr.push(JSON.parse(res.text));
+        expect(res.statusCode).toBe(201);
+        expect(res.text).toEqual(result);
+        done();
+      });
   });
-  /*
-  * Test for /GET:id
-  */
-  describe('/GET/:id product', () => {
-    it('it should GET a book by the given id', done => {
-      chai.request(server)
-        .get(`/api/products/${id}`)
-        .end((err, res) => {
-          res.should.have.status(successCode);
-          res.body.should.be.a('object');
-          res.body.should.have.property('id').eql(id);
-          res.body.should.have.property('description');
-          res.body.should.have.property('price');
-          res.body.should.have.property('name').eql(testName);
-          done();
-        });
-    });
+
+  test("/GET/:id person", (done) => {
+    request(server)
+      .get(`/person/${tempArr[0].id}`)
+      .end((err, res) => {
+        expect(res.statusCode).toBe(200);
+        expect(res.text).toEqual(JSON.stringify(tempArr[0]));
+        done();
+      });
   });
-  /*
-  * Test for /PUT:id
-  */
-  describe('/PUT/:id product', () => {
-    it('it should UPDATE a product given the id', done => {
-      chai.request(server)
-        .put(`/api/products/${id}`)
-        .send(testPrice)
-        .end((err, res) => {
-          res.should.have.status(successCode);
-          res.body.should.be.a('object');
-          res.body.should.have.property('id').eql(id);
-          res.body.should.have.property('name').eql(testName);
-          res.body.should.have.property('description');
-          res.body.should.have.property('price').eql(testPrice.price);
-          done();
-        });
-    });
+
+  test("/PUT/:id person", ( done ) => {
+    request(server)
+      .put(`/person/${tempArr[0].id}`)
+      .send(tempArr[0])
+      .end((err, res) => {
+        tempArr[0].name = secondPerson.name;
+        tempArr[0].age = secondPerson.age;
+        tempArr[0].secName = secondPerson.age;
+        tempArr[0].hobbies = secondPerson.hobbies;
+        tempArr[0].id = secondPerson.id;
+
+        expect(res.statusCode).toBe(200);
+        expect(JSON.stringify(secondPerson)).toEqual(
+          JSON.stringify(tempArr[0])
+        );
+        done();
+      });
   });
-  /*
-  * Test for /DELETE:id
-  */
-  describe('/DELETE/:id product', () => {
-    it('it should DELETE a product given the id', done => {
-      chai.request(server)
-        .delete(`/api/products/${id}`)
-        .end((err, res) => {
-          res.should.have.status(successCode);
-          res.body.should.be.a('object');
-          res.body.should.have.property('message').eql(`Product ${id} removed`);
-          done();
-        });
+
+  test("/DELETE/:id person", () => {
+    request( server )
+    .delete( `/person/${tempArr[0].id}` )
+    .end( ( err, res ) => {
+    expect( res.statusCode ).toBe( 204 );
+    done();
     });
+
   });
 });

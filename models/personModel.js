@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 
-let persons = require('../data/persons')
+let persons = require('../data/person');
 
 const { writeDataToFile } = require('../utils');
 
@@ -21,7 +21,7 @@ function findById(id) {
 
 function findByIndex(id) {
     return new Promise((resolve, reject) => {
-        const product = persons.find((p) => p.id === id)
+        const product = persons[id];
         resolve(product)
     })
 }
@@ -61,6 +61,7 @@ function remove(id) {
 module.exports = {
     findAll,
     findById,
+    findByIndex,
     create,
     update,
     remove

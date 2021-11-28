@@ -6,27 +6,44 @@ const {
   updatePerson,
   deletePerson,
 } = require("./controllers/personController");
-const { getPostData } = require("./utils");
 
 require("dotenv").config();
 
 const server = http.createServer(async (req, res) => {
-  if (req.url === "/person" && req.method === "GET") {
-    getPersons(req, res)
-    } else if (req.url.match(/\/person\/([0-9]+)/) && req.method === "GET") {
-        const id = req.url.split('/')[2]
-        getPerson(req, res, id)
-    } else if (req.url.match(/\/person\/([0-9]+)/) && req.method === "DELETE") {
-        const id = req.url.split('/')[2]
-        deletePerson(req, res, id);
-    } else if (req.url.match(/\/person\/([0-9]+)/) && req.method === "PUT") {
-        const id = req.url.split('/')[2]
-        updatePerson(req, res, id)
+  try {
+    //   throw new Error();
+    if (req.url === "/person" && req.method === "GET") {
+      getPersons(req, res);
+    } else if (req.url.match(/\/person\/([0-9-]*)/) && req.method === "GET") {
+      const id = req.url.split("/")[2];
+      if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Id not fund" }));
+      } else getPerson(req, res, id);
+    } else if (
+      req.url.match(/\/person\/([0-9-]*)/) &&
+      req.method === "DELETE"
+    ) {
+      const id = req.url.split("/")[2];
+      if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Id not fund" }));
+      } else deletePerson(req, res, id);
+    } else if (req.url.match(/\/person\/([0-9-]*)/) && req.method === "PUT") {
+      const id = req.url.split("/")[2];
+      if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Id not fund" }));
+      } else updatePerson(req, res, id);
     } else if (req.url === "/person" && req.method === "POST") {
-        createPerson(req, res)
+      createPerson(req, res);
     } else {
-    res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "Route not found" }));
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "Route not found" }));
+    }
+  } catch (err) {
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Server Error" }));
   }
 });
 

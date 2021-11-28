@@ -2,9 +2,14 @@
   "name": "simple-crud-api",
   "version": "1.0.0",
   "description": "",
-  "main": "crud.js",
+  "main": "app.js",
   "scripts": {
-    "build": "webpack"
+    "start": "node ./src/app.js",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "build": "webpack",
+    "start:dev": "set NODE_ENV=development && webpack && nodemon dist/bundle.js",
+    "start:prod": "set NODE_ENV=production && webpack && node dist/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +24,10 @@
   "homepage": "https://github.com/MaxKoval1ov/simple-crud-api#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "uuid": "^8.3.2"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6",
+    "uuid": "^8.3.2",
+    "webpack-node-externals": "^3.0.0"
   },
   "devDependencies": {
     "jest": "^27.3.1",

@@ -8,10 +8,6 @@ function writeDataToFile(filename, content) {
   });
 }
 
-function writeDataToArray(mas) {
-
-}
-
 function getPostData(req) {
   return new Promise((resolve, reject) => {
     try {

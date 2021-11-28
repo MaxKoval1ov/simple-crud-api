@@ -15,15 +15,15 @@ async function getPersons(req, res) {
 
 async function getPerson(req, res, id) {
     try {
-        const person = await Person.findById(id)
+        const personById = await Person.findById(id);
+        const personByIndex = await Person.findByIndex(id);
 
-        if(!person) {
-            res.writeHead(404, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ message: `Person with id: ${id} Not Found` }))
+        if(!personById && !personByIndex) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: `Person with id: ${id} Not Found` }));
         } else {
             res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify(person))
-            reject(`Person with id ${id} not found `);
+            res.end(JSON.stringify(personById || personByIndex));
         }
     } catch (error) {
         console.log(error)
@@ -55,7 +55,7 @@ async function createPerson(req, res) {
 
 async function updatePerson(req, res, id) {
     try {
-        const person = await Person.findById(id)
+        const person = await Person.findById(id);
 
         if(!person) {
             res.writeHead(404, { 'Content-Type': 'application/json' })
@@ -94,7 +94,7 @@ async function deletePerson(req, res, id) {
             res.end(JSON.stringify({ message: `Person with id: ${id} Not Found` }))
         } else {
             await Person.remove(id)
-            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.writeHead(204, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ message: `Person ${id} removed` }))
         }
     } catch (error) {

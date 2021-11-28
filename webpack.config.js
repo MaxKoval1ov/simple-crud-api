@@ -1,5 +1,6 @@
 const path = require('path')
 const TerserPlugin = require("terser-webpack-plugin");
+var nodeExternals = require('webpack-node-externals');
 
 // const isDev = process.env.NODE_ENV === 'development';
 // const isProd = !isDev;
@@ -17,4 +18,9 @@ module.exports = {
         minimize: true,
         minimizer: [new TerserPlugin()],
       },
+      resolve: {
+        extensions: ['.js', '.json'],
+    },
+    target: 'node',
+    externals: [nodeExternals()],
   };
