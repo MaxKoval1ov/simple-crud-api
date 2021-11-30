@@ -32,13 +32,21 @@ async function getPerson(req, res, id) {
 
 async function createPerson(req, res) {
     try {
-        const body = await getPostData(req)
+        let body = await getPostData(req)
+        try{
+            body = JSON.parse(body);
+        }
+        catch{
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: `Wrong JSON format` }));
+            return
+        }
 
-        const { name, secName, age, hobbies } = JSON.parse(body);
+        const { name, secName, age, hobbies } = body;
 
         if(!age || !hobbies || ! name){
             res.writeHead(400, { 'Content-Type': 'application/json' })
-            return res.end("Name, age, hobbies are required!");  
+            return res.end({message:"Name, age, hobbies are required!"});  
         }
 
         const person = { name, secName, age, hobbies }
@@ -61,7 +69,15 @@ async function updatePerson(req, res, id) {
             res.writeHead(404, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ message: 'Person Not Found' }))
         } else {
-            const body = await getPostData(req)
+            let body = await getPostData(req)
+            try{
+                body = JSON.parse(body)
+            }
+            catch{
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ message: `Wrong JSON format` }));
+                return
+            }
 
             const { name, secName, age, hobbies } = JSON.parse(body)
 
