@@ -8,7 +8,7 @@
 $ node -v
 ```
 
-- copy all application files to local disk via downloading zip or cloning [repository](https://github.com/IudinAleksei/simple-crud-api/tree/simple-crud-api)
+- copy all application files to local disk
 - install the packages form package.json:
 
 ```bash
@@ -32,10 +32,15 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-- run e2e test of the application with complex scenarios:
+- run test of the application:
 
 ```bash
-$ npm run e2e
+$ npm run test
+
+- run test:coverage for starting jest:coverage test:
+
+```bash
+$ npm run test:coverage
 ```
 
 API path `http://localhost:{PORT}/person`:
