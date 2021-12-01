@@ -32,13 +32,22 @@ async function getPerson(req, res, id) {
 
 async function createPerson(req, res) {
     try {
-        const body = await getPostData(req)
+        let body = await getPostData(req)
+        try{
+            body = JSON.parse(body);
+        }
+        catch{
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: `Wrong JSON format` }));
+            return
+        }
 
-        const { name, secName, age, hobbies } = JSON.parse(body);
+        const { name, secName, age, hobbies } = body;
 
         if(!age || !hobbies || ! name){
-            res.writeHead(400, { 'Content-Type': 'application/json' })
-            return res.end("Name, age, hobbies are required!");  
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message:"Name, age, hobbies are required!"}));  
+            return
         }
 
         const person = { name, secName, age, hobbies }
@@ -61,15 +70,23 @@ async function updatePerson(req, res, id) {
             res.writeHead(404, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ message: 'Person Not Found' }))
         } else {
-            const body = await getPostData(req)
-
-            const { name, secName, age, hobbies } = JSON.parse(body)
+            let body = await getPostData(req);
+            try{
+                body = JSON.parse(body)
+            }
+            catch{
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ message: `Wrong JSON format` }));
+                return
+            }
+            const { name, secName, age, hobbies } = body;
 
             const PersonData = {
                 name: name || person.name,
                 secName: secName || person.secName,
                 age: age || person.age,
-                hobbies: hobbies || person.hobbies
+                hobbies: hobbies || person.hobbies,
+                id: id || person.id
             }
 
             const updPerson = await Person.update(id, PersonData)
