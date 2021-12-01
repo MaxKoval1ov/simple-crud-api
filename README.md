@@ -15,10 +15,7 @@ $ node -v
 $ npm i
 ```
 
-- by default, the application listening port is 3000
-- if you want to set port for app, rename file `.env.example` to `.env` and assign the desired value to the `PORT` variable
-
-- if you want start application with non-empty DB, rename file `.env.example` to `.env` and assign `true` to the `WITHDATA` variable
+- by default, the application listening port is 5000
 
 - run the application in development-mode (with nodemon):
 
