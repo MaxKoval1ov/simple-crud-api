@@ -45,8 +45,9 @@ async function createPerson(req, res) {
         const { name, secName, age, hobbies } = body;
 
         if(!age || !hobbies || ! name){
-            res.writeHead(400, { 'Content-Type': 'application/json' })
-            return res.end({message:"Name, age, hobbies are required!"});  
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message:"Name, age, hobbies are required!"}));  
+            return
         }
 
         const person = { name, secName, age, hobbies }
@@ -69,7 +70,7 @@ async function updatePerson(req, res, id) {
             res.writeHead(404, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ message: 'Person Not Found' }))
         } else {
-            let body = await getPostData(req)
+            let body = await getPostData(req);
             try{
                 body = JSON.parse(body)
             }
@@ -78,8 +79,7 @@ async function updatePerson(req, res, id) {
                 res.end(JSON.stringify({ message: `Wrong JSON format` }));
                 return
             }
-
-            const { name, secName, age, hobbies,id } = JSON.parse(body)
+            const { name, secName, age, hobbies } = body;
 
             const PersonData = {
                 name: name || person.name,
