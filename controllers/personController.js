@@ -79,13 +79,14 @@ async function updatePerson(req, res, id) {
                 return
             }
 
-            const { name, secName, age, hobbies } = JSON.parse(body)
+            const { name, secName, age, hobbies,id } = JSON.parse(body)
 
             const PersonData = {
                 name: name || person.name,
                 secName: secName || person.secName,
                 age: age || person.age,
-                hobbies: hobbies || person.hobbies
+                hobbies: hobbies || person.hobbies,
+                id: id || person.id
             }
 
             const updPerson = await Person.update(id, PersonData)
